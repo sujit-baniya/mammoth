@@ -1,20 +1,23 @@
 {
     "name": "mammoth-plus",
-    "version": "1.5.1",
-    "author": "Michael Williamson <mike@zwobble.org>",
-    "description": "Convert Word documents from docx to simple HTML and Markdown",
+    "version": "2.0.0",
+    "author": "heweifeng <iheweifeng@gmail.com>",
+    "description": "Convert Word documents from docx to rich HTML and Markdown",
     "keywords": [
         "docx",
         "html",
         "office",
         "word",
         "markdown",
-        "md"
+        "md",
+        "math",
+        "MathML",
+        "style"
     ],
     "main": "./lib/index.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/mwilliamson/mammoth-plus.js.git"
+        "url": "https://github.com/ihwf/mammoth-plus"
     },
     "dependencies": {
         "argparse": "~1.0.3",
