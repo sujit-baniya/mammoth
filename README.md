@@ -1,6 +1,6 @@
 # mammoth-plus .docx to HTML converter
 
-mammoth-plus is inspired by [Mammoth](https://github.com/mwilliamson/mammoth.js) and based on it.
+mammoth-plus is inspired by [Mammoth](https://github.com/mwilliamson/mammoth.js) and based on [Mammoth(v1.5.1)](https://github.com/mwilliamson/mammoth.js).
 
 mammoth-plus expands some features that [Mammoth](https://github.com/mwilliamson/mammoth.js) do not have, such as support math, styling, image size...
 
