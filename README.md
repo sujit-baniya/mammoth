@@ -1,17 +1,8 @@
 # mammoth-plus .docx to HTML converter
 
-mammoth-plus is designed to convert .docx documents,
-such as those created by Microsoft Word, Google Docs and LibreOffice,
-and convert them to HTML.
-mammoth-plus aims to produce simple and clean HTML by using semantic information in the document,
-and ignoring other details.
-For instance,
-mammoth-plus converts any paragraph with the style `Heading 1` to `h1` elements,
-rather than attempting to exactly copy the styling (font, text size, colour, etc.) of the heading.
+mammoth-plus is inspired by [Mammoth](https://github.com/mwilliamson/mammoth.js) and based on it.
 
-There's a large mismatch between the structure used by .docx and the structure of HTML,
-meaning that the conversion is unlikely to be perfect for more complicated documents.
-mammoth-plus works best if you only use styles to semantically mark up your document.
+mammoth-plus expands some features that [Mammoth](https://github.com/mwilliamson/mammoth.js) do not have, such as support math, styling, image size...
 
 The following features are currently supported:
 
@@ -30,7 +21,7 @@ The following features are currently supported:
 
 -   Images.
 
--   Bold, italics, underlines, strikethrough, superscript and subscript.
+-   Bold, italics, underlines, strikethrough, superscript, subscript, font color, text highlight color and text align.
 
 -   Links.
 
@@ -40,6 +31,8 @@ The following features are currently supported:
     that appears after the paragraph containing the text box.
 
 -   Comments.
+
+-   math.
 
 ## Web demo
 
@@ -53,82 +46,21 @@ The easiest way to try out mammoth-plus is to use the web demo:
 
     npm install mammoth-plus
 
-## Other supported platforms
-
--   [Python](https://github.com/mwilliamson/python-mammoth).
-    Available [on PyPI](https://pypi.python.org/pypi/mammoth).
-
--   [WordPress](https://wordpress.org/plugins/mammoth-docx-converter/).
-
--   [Java/JVM](https://github.com/mwilliamson/java-mammoth).
-    Available [on Maven Central](http://search.maven.org/#search|ga|1|g%3A%22org.zwobble.mammoth-plus%22%20AND%20a%3A%22mammoth-plus%22).
-
--   [.NET](https://github.com/mwilliamson/dotnet-mammoth).
-    Available [on NuGet](https://www.nuget.org/packages/mammoth/).
-
 ## Usage
-
-### CLI
-
-You can convert docx files by passing the path to the docx file and the output file.
-For instance:
-
-    mammoth-plus document.docx output.html
-
-If no output file is specified, output is written to stdout instead.
-
-The output is an HTML fragment, rather than a full HTML document, encoded with UTF-8.
-Since the encoding is not explicitly set in the fragment,
-opening the output file in a web browser may cause Unicode characters to be rendered incorrectly if the browser doesn't default to UTF-8.
-
-#### Images
-
-By default, images are included inline in the output HTML.
-If an output directory is specified by `--output-dir`,
-the images are written to separate files instead.
-For instance:
-
-    mammoth-plus document.docx --output-dir=output-dir
-
-Existing files will be overwritten if present.
-
-#### Styles
-
-A custom style map can be read from a file using `--style-map`.
-For instance:
-
-    mammoth-plus document.docx output.html --style-map=custom-style-map
-
-Where `custom-style-map` looks something like:
-
-    p[style-name='Aside Heading'] => div.aside > h2:fresh
-    p[style-name='Aside Text'] => div.aside > p:fresh
-
-A description of the syntax for style maps can be found in the section ["Writing style maps"](#writing-style-maps).
-
-#### Markdown
-
-Markdown support is deprecated.
-Generating HTML and using a separate library to convert the HTML to Markdown is recommended,
-and is likely to produce better results.
-
-Using `--output-format=markdown` will cause Markdown to be generated.
-For instance:
-
-    mammoth-plus document.docx --output-format=markdown
 
 ### Library
 
-In node.js, mammoth-plus can be required in the usual way:
+mammoth-plus can be required/import in the usual way:
 
 ```javascript
 var mammothPlus = require('mammoth-plus')
+// or
+import mammothPlus from 'mammoth-plus'
 ```
 
-To generate a standalone JavaScript file for the browser,
+If not use module system,
+to generate a standalone JavaScript file for the browser,
 use `mammoth-plus.browser.js` (generate using `make setup` if it is not already present).
-This uses any loaded module system.
-If no module system is found,
 `mammothPlus` is set as a window global.
 
 #### Basic conversion
@@ -139,7 +71,10 @@ To convert an existing .docx file to HTML, use `mammothPlus.convertToHtml`:
 var mammothPlus = require('mammoth-plus')
 
 mammothPlus
-    .convertToHtml({ path: 'path/to/document.docx' })
+    .convertToHtml({
+        path: 'path/to/document.docx', // in node.js
+        arrayBuffer: 'array buffer containing a .docx file' // in browser
+    })
     .then(function (result) {
         var html = result.value // The generated HTML
         var messages = result.messages // Any messages, such as warnings during conversion
@@ -155,7 +90,10 @@ Each paragraph is followed by two newlines.
 
 ```javascript
 mammothPlus
-    .extractRawText({ path: 'path/to/document.docx' })
+    .extractRawText({
+        path: 'path/to/document.docx', // in node.js
+        arrayBuffer: 'array buffer containing a .docx file' // in browser
+    })
     .then(function (result) {
         var text = result.value // The raw text
         var messages = result.messages
@@ -183,7 +121,13 @@ var options = {
         "p[style-name='Subsection Title'] => h2:fresh"
     ]
 }
-mammothPlus.convertToHtml({ path: 'path/to/document.docx' }, options)
+mammothPlus.convertToHtml(
+    {
+        path: 'path/to/document.docx', // in node.js
+        arrayBuffer: 'array buffer containing a .docx file' // in browser
+    },
+    options
+)
 ```
 
 To more easily support style maps stored in text files,
@@ -244,7 +188,13 @@ var mammothPlus = require('mammoth-plus')
 var options = {
     styleMap: ['b => em']
 }
-mammothPlus.convertToHtml({ path: 'path/to/document.docx' }, options)
+mammothPlus.convertToHtml(
+    {
+        path: 'path/to/document.docx', // in node.js
+        arrayBuffer: 'array buffer containing a .docx file' // in browser
+    },
+    options
+)
 ```
 
 #### Italic
@@ -259,7 +209,13 @@ var mammothPlus = require('mammoth-plus')
 var options = {
     styleMap: ['i => strong']
 }
-mammothPlus.convertToHtml({ path: 'path/to/document.docx' }, options)
+mammothPlus.convertToHtml(
+    {
+        path: 'path/to/document.docx', // in node.js
+        arrayBuffer: 'array buffer containing a .docx file' // in browser
+    },
+    options
+)
 ```
 
 #### Underline
@@ -275,7 +231,13 @@ var mammothPlus = require('mammoth-plus')
 var options = {
     styleMap: ['u => em']
 }
-mammothPlus.convertToHtml({ path: 'path/to/document.docx' }, options)
+mammothPlus.convertToHtml(
+    {
+        path: 'path/to/document.docx', // in node.js
+        arrayBuffer: 'array buffer containing a .docx file' // in browser
+    },
+    options
+)
 ```
 
 #### Strikethrough
@@ -290,7 +252,13 @@ var mammothPlus = require('mammoth-plus')
 var options = {
     styleMap: ['strike => del']
 }
-mammothPlus.convertToHtml({ path: 'path/to/document.docx' }, options)
+mammothPlus.convertToHtml(
+    {
+        path: 'path/to/document.docx', // in node.js
+        arrayBuffer: 'array buffer containing a .docx file' // in browser
+    },
+    options
+)
 ```
 
 #### Comments
@@ -306,11 +274,66 @@ var mammothPlus = require('mammoth-plus')
 var options = {
     styleMap: ['comment-reference => sup']
 }
-mammothPlus.convertToHtml({ path: 'path/to/document.docx' }, options)
+mammothPlus.convertToHtml(
+    {
+        path: 'path/to/document.docx', // in node.js
+        arrayBuffer: 'array buffer containing a .docx file' // in browser
+    },
+    options
+)
 ```
 
 Comments will be appended to the end of the document,
 with links to the comments wrapped using the specified style mapping.
+
+### CLI
+
+You can convert docx files by passing the path to the docx file and the output file.
+For instance:
+
+    mammoth-plus document.docx output.html
+
+If no output file is specified, output is written to stdout instead.
+
+The output is an HTML fragment, rather than a full HTML document, encoded with UTF-8.
+Since the encoding is not explicitly set in the fragment,
+opening the output file in a web browser may cause Unicode characters to be rendered incorrectly if the browser doesn't default to UTF-8.
+
+#### Images
+
+By default, images are included inline in the output HTML.
+If an output directory is specified by `--output-dir`,
+the images are written to separate files instead.
+For instance:
+
+    mammoth-plus document.docx --output-dir=output-dir
+
+Existing files will be overwritten if present.
+
+#### Styles
+
+A custom style map can be read from a file using `--style-map`.
+For instance:
+
+    mammoth-plus document.docx output.html --style-map=custom-style-map
+
+Where `custom-style-map` looks something like:
+
+    p[style-name='Aside Heading'] => div.aside > h2:fresh
+    p[style-name='Aside Text'] => div.aside > p:fresh
+
+A description of the syntax for style maps can be found in the section ["Writing style maps"](#writing-style-maps).
+
+#### Markdown
+
+Markdown support is deprecated.
+Generating HTML and using a separate library to convert the HTML to Markdown is recommended,
+and is likely to produce better results.
+
+Using `--output-format=markdown` will cause Markdown to be generated.
+For instance:
+
+    mammoth-plus document.docx --output-format=markdown
 
 ### API
 
@@ -430,15 +453,14 @@ it will use the embedded style map.
 For instance:
 
 ```javascript
-mammoth -
-    plus
-        .embedStyleMap(
-            { path: sourcePath },
-            "p[style-name='Section Title'] => h1:fresh"
-        )
-        .then(function (docx) {
-            fs.writeFile(destinationPath, docx.toBuffer(), callback)
-        })
+mammothPlus
+    .embedStyleMap(
+        { path: sourcePath },
+        "p[style-name='Section Title'] => h1:fresh"
+    )
+    .then(function (docx) {
+        fs.writeFile(destinationPath, docx.toBuffer(), callback)
+    })
 ```
 
 #### Messages
@@ -473,14 +495,13 @@ this will be automatically added to the element's attributes.
 For instance, the following replicates the default image conversion:
 
 ```javascript
-mammoth -
-    plus.images.imgElement(function (image) {
-        return image.read('base64').then(function (imageBuffer) {
-            return {
-                src: 'data:' + image.contentType + ';base64,' + imageBuffer
-            }
-        })
+mammothPlus.images.imgElement(function (image) {
+    return image.read('base64').then(function (imageBuffer) {
+        return {
+            src: 'data:' + image.contentType + ';base64,' + imageBuffer
+        }
     })
+})
 ```
 
 `mammothPlus.images.dataUri` is the default image converter.
@@ -540,7 +561,7 @@ function transformParagraph(element) {
 }
 
 var options = {
-    transformDocument: mammoth - plus.transforms.paragraph(transformParagraph)
+    transformDocument: mammothPlus.transforms.paragraph(transformParagraph)
 }
 ```
 
@@ -550,7 +571,7 @@ Or if you want paragraphs that have been explicitly set to use monospace fonts t
 const monospaceFonts = ['consolas', 'courier', 'courier new']
 
 function transformParagraph(paragraph) {
-    var runs = mammoth - plus.transforms.getDescendantsOfType(paragraph, 'run')
+    var runs = mammothPlus.transforms.getDescendantsOfType(paragraph, 'run')
     var isMatch =
         runs.length > 0 &&
         runs.every(function (run) {
@@ -571,7 +592,7 @@ function transformParagraph(paragraph) {
 }
 
 var options = {
-    transformDocument: mammoth - plus.transforms.paragraph(transformParagraph),
+    transformDocument: mammothPlus.transforms.paragraph(transformParagraph),
     styleMap: ["p[style-name='Code'] => pre:separator('\n')"]
 }
 ```
@@ -598,7 +619,7 @@ Gets all descendants of a particular type of an element.
 For instance, to get all runs within an element `paragraph`:
 
 ```javascript
-var runs = mammoth - plus.transforms.getDescendantsOfType(paragraph, 'run')
+var runs = mammothPlus.transforms.getDescendantsOfType(paragraph, 'run')
 ```
 
 ## Writing style maps
@@ -826,85 +847,3 @@ div.aside > h2
 ```
 
 You can nest elements to any depth.
-
-## Upgrading to later versions
-
-### 1.0.0
-
-The `convertUnderline` option is no longer supported.
-Use style mappings to control how underlines are handled.
-
-### 0.3.0
-
-If you've defined custom style maps or used a document transform,
-you will likely need to change your usage slightly.
-Otherwise, you should be able to continue using mammoth-plus as before.
-
-#### Custom style maps
-
-Prior to 0.3.0, mammoth-plus matched docx paragraphs using style IDs e.g. `p.Heading1`.
-These IDs are used internally in the docx format,
-and are distinct from the style name
-i.e. the name shown by Microsoft Word or LibreOffice.
-Although mammoth-plus still supports matching styles by ID,
-matching styles by name is preferred.
-For instance, instead of:
-
-`p.AsideHeading => h1`
-
-prefer:
-
-`p[style-name='Aside Heading'] => h1`
-
-#### Document transforms
-
-Prior to 0.3.0,
-mammoth-plus (misleadingly) assigned the style ID to a property called `styleName`.
-The style ID is now assigned to a more appropriate property, `styleId`.
-The `styleName` property is now set to the name of the style.
-To preserve existing behaviour,
-any existing document transforms should be rewritten in one of two ways:
-
--   Set the `styleId` property instead of the `styleName` property
-
--   Set the `styleName` property to the name of the style, rather than the ID
-
-### 0.2.0
-
-The function `mammothPlus.style()` was renamed to `mammothPlus.styleMapping()`.
-
-## Acknowledgements
-
-Thanks to the following people for their contributions to mammoth-plus:
-
--   [Craig Leinoff](https://github.com/Offlein):
-
-    -   Document transforms
-
--   [John McLear](https://github.com/JohnMcLear):
-
-    -   Underline support
-
--   [Chris Price](https://github.com/studiochris):
-
-    -   node.js `Buffer` support
-    -   UTF8 BOM handling
-
--   [Stoo Goff](https://github.com/stoogoff)
-
-    -   Markdown support
-
--   [Andreas Lubbe](https://github.com/alubbe)
-
-    -   Internal hyperlink support
-
--   [Jacob Wang](https://github.com/jaceyshome)
-
-    -   Supporting styles defined without names
-
-## Donations
-
-If you'd like to say thanks, feel free to [make a donation through Ko-fi](https://ko-fi.com/S6S01MG20).
-
-If you use mammoth-plus as part of your business,
-please consider supporting the ongoing maintenance of mammoth-plus by [making a weekly donation through Liberapay](https://liberapay.com/mwilliamson/donate).
