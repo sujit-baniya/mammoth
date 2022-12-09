@@ -1,6 +1,6 @@
 {
     "name": "mammoth-plus",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "author": "heweifeng <iheweifeng@gmail.com>",
     "description": "Convert Word documents from docx to rich HTML and Markdown",
     "keywords": [
@@ -14,7 +14,7 @@
         "markdown",
         "md"
     ],
-    "main": "./lib/index.js",
+    "main": "./dist/mammoth-plus.min.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/ihwf/mammoth-plus"
@@ -53,7 +53,7 @@
     "scripts": {
         "pretest": "eslint lib test",
         "test": "mocha 'test/**/*.tests.js'",
-        "prepare": "make mammoth-plus.browser.min.js"
+        "prepare": "make mammoth-plus.min.js"
     },
     "license": "BSD-2-Clause"
 }

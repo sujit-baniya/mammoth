@@ -60,7 +60,7 @@ import mammothPlus from 'mammoth-plus'
 
 If not use module system,
 to generate a standalone JavaScript file for the browser,
-use `mammoth-plus.browser.js` (generate using `make setup` if it is not already present).
+use `mammoth-plus.min.js` (generate using `make setup` if it is not already present).
 `mammothPlus` is set as a window global.
 
 #### Basic conversion
