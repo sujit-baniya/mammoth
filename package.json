@@ -8,11 +8,11 @@
         "html",
         "office",
         "word",
-        "markdown",
-        "md",
         "math",
         "MathML",
-        "style"
+        "style",
+        "markdown",
+        "md"
     ],
     "main": "./lib/index.js",
     "repository": {
