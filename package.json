@@ -1,6 +1,6 @@
 {
     "name": "mammoth-plus",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "heweifeng <iheweifeng@gmail.com>",
     "description": "Convert Word documents from docx to rich HTML and Markdown",
     "keywords": [

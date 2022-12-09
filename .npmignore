@@ -1,5 +1,6 @@
 _build
 .git
+.github
 .gitignore
 test
 browser-demo
