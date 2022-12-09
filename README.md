@@ -36,11 +36,7 @@ The following features are currently supported:
 
 ## Web demo
 
-The easiest way to try out mammoth-plus is to use the web demo:
-
--   Clone this repository
--   Run `make setup`
--   Open `browser-demo/index.html` in a web browser
+Try it in [here](https://ihwf.github.io/mammoth-plus/)
 
 ## Installation
 
