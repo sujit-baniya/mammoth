@@ -36,7 +36,7 @@ The following features are currently supported:
 
 ## Web demo
 
-Try it in [here](https://ihwf.github.io/mammoth-plus/)
+Try in [here](https://ihwf.github.io/mammoth-plus/)
 
 ## Installation
 
