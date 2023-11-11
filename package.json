@@ -1,5 +1,5 @@
 {
-    "name": "mammoth",
+    "name": "mammoth-spb",
     "version": "2.0.2",
     "author": "Sujit Baniya <s.baniya.np@gmail.com>",
     "description": "Convert Word documents from docx to rich HTML and Markdown",
