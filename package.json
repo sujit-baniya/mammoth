@@ -1,7 +1,7 @@
 {
     "name": "mammoth",
     "version": "2.0.2",
-    "author": "heweifeng <iheweifeng@gmail.com>",
+    "author": "Sujit Baniya <s.baniya.np@gmail.com>",
     "description": "Convert Word documents from docx to rich HTML and Markdown",
     "keywords": [
         "docx",
@@ -17,7 +17,7 @@
     "main": "./dist/mammoth-plus.min.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/ihwf/mammoth-plus"
+        "url": "https://github.com/sujit-baniya/mammoth"
     },
     "dependencies": {
         "argparse": "~1.0.3",
